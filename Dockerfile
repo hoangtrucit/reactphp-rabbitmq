@@ -1,0 +1,42 @@
+FROM php:7.2.10
+
+RUN apt-get update && apt-get install -y \
+    g++ \
+    pkg-config \
+    build-essential \
+    libicu-dev \
+    libmcrypt-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
+    libfreetype6 \
+    libfontconfig \
+    libxml2-dev \
+    mysql-client \
+    libldap2-dev \
+    wget
+
+RUN yes '' | pecl install -f mcrypt
+RUN echo "extension=mcrypt.so" > /usr/local/etc/php/conf.d/mcrypt.ini
+
+RUN apt-get clean
+
+RUN docker-php-ext-install pdo pdo_mysql
+RUN docker-php-ext-install intl
+RUN docker-php-ext-install mbstring
+RUN docker-php-ext-install bcmath
+RUN docker-php-ext-enable mcrypt
+#RUN docker-php-ext-install mcrypt
+RUN docker-php-ext-install zip
+RUN docker-php-ext-install exif
+RUN docker-php-ext-install iconv
+
+# install composer
+RUN curl -sS https://getcomposer.org/installer | php
+RUN mv composer.phar /usr/local/bin/composer
+
+RUN mkdir -p ./app
+WORKDIR ./app
+
+COPY ./docker-entrypoint.sh /
+CMD /docker-entrypoint.sh

@@ -1,0 +1,32 @@
+version: "2"
+
+services:
+  rabbitmq:
+    container_name: "sv-amq"
+    image: "rabbitmq:3-management"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: "user"
+      RABBITMQ_DEFAULT_PASS: "user"
+    networks:
+      - php-rabbitmq
+
+  php:
+    container_name: "sv-consume"
+    image: "php.7.2.10"
+    build:
+      context: .
+    volumes:
+      - ./src:/app/src
+      - ./composer.json:/app/composer.json
+      - ./composer.lock:/app/composer.lock
+    depends_on:
+      - rabbitmq
+    networks:
+      - php-rabbitmq
+
+networks:
+  php-rabbitmq:
+    driver: bridge

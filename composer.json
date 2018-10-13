@@ -1,0 +1,13 @@
+{
+    "name": "tructran/reactphp",
+    "authors": [
+        {
+            "name": "Truc Tran",
+            "email": "truc.tran@go1.com"
+        }
+    ],
+    "require": {
+        "react/event-loop": "^1.0.0",
+        "bunny/bunny": "@dev"
+    }
+}
