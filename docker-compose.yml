@@ -14,18 +14,33 @@ services:
       - php-rabbitmq
 
   php:
-    container_name: "sv-consume"
-    image: "php.7.2.10"
+    container_name: "sv-consume-amq"
     build:
       context: .
+      dockerfile: Dockerfile-amq
     volumes:
-      - ./src:/app/src
+      - ./src/amq:/app/src
       - ./composer.json:/app/composer.json
       - ./composer.lock:/app/composer.lock
     depends_on:
       - rabbitmq
     networks:
       - php-rabbitmq
+
+  kinesis:
+    container_name: "sv-consume-kinesis"
+    build:
+      context: .
+      dockerfile: Dockerfile-kinesis
+    environment:
+      AWS_ACCESS_KEY_ID: "AWS_ACCESS_KEY_ID"
+      AWS_SECRET_ACCESS_KEY: "AWS_SECRET_ACCESS_KEY"
+    volumes:
+    - ./src/kinesis:/app/src
+    - ./composer.json:/app/composer.json
+    - ./composer.lock:/app/composer.lock
+    networks:
+    - php-rabbitmq
 
 networks:
   php-rabbitmq:

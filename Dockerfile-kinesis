@@ -26,7 +26,6 @@ RUN docker-php-ext-install intl
 RUN docker-php-ext-install mbstring
 RUN docker-php-ext-install bcmath
 RUN docker-php-ext-enable mcrypt
-#RUN docker-php-ext-install mcrypt
 RUN docker-php-ext-install zip
 RUN docker-php-ext-install exif
 RUN docker-php-ext-install iconv
@@ -38,5 +37,5 @@ RUN mv composer.phar /usr/local/bin/composer
 RUN mkdir -p ./app
 WORKDIR ./app
 
-COPY ./docker-entrypoint.sh /
-CMD /docker-entrypoint.sh
+COPY ./docker-entrypoint-kinesis.sh /
+CMD /docker-entrypoint-kinesis.sh
